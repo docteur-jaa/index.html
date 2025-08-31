@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Calculateur d'âge de grossesse</title>
+  <title>Calculateur d'Ã¢ge de grossesse</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -46,8 +46,8 @@
 </head>
 <body>
   <div class="card">
-    <h2>Calculateur d'âge de grossesse</h2>
-    <label for="ddr">Date des dernières règles :</label>
+    <h2>Calculateur d'Ã¢ge de grossesse</h2>
+    <label for="ddr">Date des derniÃ¨res rÃ¨gles :</label>
     <input type="date" id="ddr">
     <button onclick="calculer()">Calculer</button>
     <div id="resultat" class="result"></div>
@@ -67,8 +67,9 @@
       const semaines = Math.floor(jours / 7);
       const joursRestants = jours % 7;
       document.getElementById('resultat').innerText =
-        `Âge de la grossesse : ${semaines} semaines + ${joursRestants} jours.`;
+        `Ã‚ge de la grossesse : ${semaines} semaines + ${joursRestants} jours.`;
     }
   </script>
 </body>
 </html>
+
