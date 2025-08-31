@@ -2,16 +2,16 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculateur d'âge de grossesse</title>
+  <meta name="description" content="Calculez l'âge de la grossesse à partir de la date des dernières règles - Dr Jaafar, Regueb.">
 
-  <!-- Balises Open Graph pour Facebook -->
+  <!-- Open Graph pour Facebook -->
   <meta property="og:title" content="Calculateur d'âge de grossesse - Dr Jaafar">
   <meta property="og:description" content="Un outil simple pour calculer l'âge de la grossesse à partir de la date des dernières règles.">
   <meta property="og:image" content="https://docteur-jaa.github.io/images/symbolgynecooeuf.png">
-  <meta property="og:url" content="https://docteur-jaa.github.io/index.html">
+  <meta property="og:url" content="https://docteur-jaa.github.io/">
   <meta property="og:type" content="website">
-
-
 
   <style>
     body {
@@ -35,30 +35,13 @@
       transition: transform 0.3s ease;
     }
 
-    .card:hover {
-      transform: scale(1.03);
-    }
+    .card:hover { transform: scale(1.03); }
 
-    h2 {
-      color: #004aad;
-      margin-bottom: 5px;
-      font-size: 24px;
-    }
+    h2 { color: #004aad; margin-bottom: 5px; font-size: 24px; }
 
-    .subtitle {
-      color: #222;
-      font-size: 14px;
-      margin-bottom: 20px;
-      font-style: italic;
-    }
+    .subtitle { color: #222; font-size: 14px; margin-bottom: 20px; font-style: italic; }
 
-    label {
-      color: #800080;
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      margin-bottom: 5px;
-    }
+    label { color: #800080; font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
 
     input[type="date"] {
       padding: 12px;
@@ -82,10 +65,7 @@
       transition: background 0.3s ease, transform 0.2s ease;
     }
 
-    button:hover {
-      background: #0056b3;
-      transform: translateY(-2px);
-    }
+    button:hover { background: #0056b3; transform: translateY(-2px); }
 
     .result {
       margin-top: 20px;
@@ -101,6 +81,8 @@
 </head>
 <body>
   <div class="card">
+    <!-- (optionnel) afficher le logo sur la page -->
+    <img src="images/symbolgynecooeuf.png" alt="Logo Dr Jaafar" style="max-width:120px;margin-bottom:12px;">
     <h2>Calcul d'âge de grossesse</h2>
     <div class="subtitle">Dr Jaafar Gynécologue – Regueb</div>
 
@@ -109,7 +91,7 @@
 
     <button onclick="calculer()">Calculer</button>
 
-    <div id="resultat" class="result"></div>
+    <div id="resultat" class="result" aria-live="polite"></div>
   </div>
 
   <script>
@@ -131,6 +113,3 @@
   </script>
 </body>
 </html>
-
-
-
