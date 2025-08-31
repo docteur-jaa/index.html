@@ -1,55 +1,104 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Calculateur d'âge de grossesse</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
+
     .card {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-      max-width: 400px;
+      background: linear-gradient(135deg, #ffb347, #9be15d); /* orange → vert pastel */
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+      max-width: 420px;
+      width: 90%;
       text-align: center;
+      transition: transform 0.3s ease;
     }
-    input, button {
-      padding: 10px;
-      margin-top: 10px;
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    h2 {
+      color: #004aad; /* titre bleu profond */
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #222; /* texte signature sombre */
+      font-size: 14px;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    label {
+      color: #800080; /* DDR en violet */
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    input[type="date"] {
+      padding: 12px;
       width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      box-sizing: border-box;
     }
+
     button {
+      margin-top: 15px;
+      padding: 12px;
+      width: 100%;
       background: #007bff;
       color: white;
-      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
       cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
+
     button:hover {
       background: #0056b3;
+      transform: translateY(-2px);
     }
+
     .result {
-      margin-top: 15px;
+      margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
-      color: #333;
+      color: #ff1493; /* rose */
+      background-color: #ccffcc; /* vert pâle */
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: inset 0px 2px 5px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <h2>Calculateur d'âge de grossesse</h2>
+    <h2>Calcul d'âge de grossesse</h2>
+    <div class="subtitle">Dr Jaafar Gynécologue – Regueb</div>
+    
     <label for="ddr">Date des dernières règles :</label>
     <input type="date" id="ddr">
+    
     <button onclick="calculer()">Calculer</button>
+    
     <div id="resultat" class="result"></div>
   </div>
 
@@ -72,4 +121,3 @@
   </script>
 </body>
 </html>
-
