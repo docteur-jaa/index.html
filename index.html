@@ -18,7 +18,7 @@
     }
 
     .card {
-      position: relative; /* nécessaire pour placer le bloc coordonnées */
+      position: relative;
       background: linear-gradient(135deg, #ffb347, #9be15d);
       padding: 30px 25px;
       border-radius: 20px;
@@ -72,7 +72,7 @@
 
     #resultatAge {
       background-color: #fff8f0;
-      color: #8B4513; /* brun clair */
+      color: #8B4513; /* brun */
     }
 
     #resultatSA {
@@ -80,28 +80,49 @@
       color: #800080; /* violet */
     }
 
-    /* Bloc coordonnées en haut à droite */
-    .contact-info {
+    /* Coordonnées cachées */
+    #contact {
+      display: none;
       position: absolute;
-      top: 10px;
+      top: 40px;
       right: 15px;
       text-align: right;
       font-size: 13px;
     }
-    .contact-info .adresse {
+    #contact .adresse {
       color: #A0522D; /* marron clair */
       font-weight: bold;
     }
-    .contact-info .tel {
+    #contact .tel {
       color: #800080; /* violet */
       font-weight: bold;
+    }
+
+    /* Bouton coordonnées */
+    .btn-contact {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 12px;
+      padding: 5px 10px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-contact:hover {
+      background: #222;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <!-- Coordonnées en haut à droite -->
-    <div class="contact-info">
+    <!-- Bouton pour afficher/masquer les coordonnées -->
+    <button class="btn-contact" onclick="toggleContact()">Voir mes coordonnées</button>
+
+    <!-- Coordonnées cachées -->
+    <div id="contact">
       <div class="adresse">Dr Ben Ali Jaafar</div>
       <div class="tel">98670415</div>
     </div>
@@ -155,9 +176,19 @@
         document.getElementById('resultatSA').innerText = "";
       }
     }
+
+    function toggleContact() {
+      const contactDiv = document.getElementById('contact');
+      if (contactDiv.style.display === "none") {
+        contactDiv.style.display = "block";
+      } else {
+        contactDiv.style.display = "none";
+      }
+    }
   </script>
 </body>
 </html>
+
 
 
 
