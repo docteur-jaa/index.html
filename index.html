@@ -84,10 +84,14 @@
     #contact {
       display: none;
       position: absolute;
-      top: 40px;
+      top: 35px;   /* placé plus haut, juste sous le bouton */
       right: 15px;
       text-align: right;
       font-size: 13px;
+      background: #fff;       /* fond blanc */
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
     }
     #contact .adresse {
       color: #A0522D; /* marron clair */
@@ -105,14 +109,14 @@
       right: 15px;
       font-size: 12px;
       padding: 5px 10px;
-      background: #444;
-      color: #fff;
-      border: none;
+      background: #f9f9f9;   /* fond clair */
+      color: #333;           /* texte foncé */
+      border: 1px solid #ccc;
       border-radius: 6px;
       cursor: pointer;
     }
     .btn-contact:hover {
-      background: #222;
+      background: #e0e0e0;
     }
   </style>
 </head>
@@ -143,51 +147,7 @@
 
     <!-- Deux cases séparées -->
     <div id="resultatAge" class="result" aria-live="polite"></div>
-    <div id="resultatSA" class="result" aria-live="polite"></div>
-  </div>
-
-  <script>
-    function calculer() {
-      const ddr = document.getElementById('ddr').value;
-      if (!ddr) {
-        document.getElementById('resultatAge').innerText = "Veuillez entrer une date.";
-        document.getElementById('resultatSA').innerText = "";
-        return;
-      }
-      const ddrDate = new Date(ddr);
-      const today = new Date();
-
-      // Calcul de l'âge actuel
-      const diff = today - ddrDate;
-      const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const semaines = Math.floor(jours / 7);
-      const joursRestants = jours % 7;
-
-      document.getElementById('resultatAge').innerText =
-        "Âge de la grossesse : " + semaines + " semaines + " + joursRestants + " jours.";
-
-      // Récupérer le nombre de SA souhaité
-      const sa = parseInt(document.getElementById('sa').value);
-      if (!isNaN(sa) && sa > 0) {
-        const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
-        document.getElementById('resultatSA').innerText =
-          "Date estimée pour " + sa + " SA : " + dateSA.toLocaleDateString();
-      } else {
-        document.getElementById('resultatSA').innerText = "";
-      }
-    }
-
-    function toggleContact() {
-      const contactDiv = document.getElementById('contact');
-      if (contactDiv.style.display === "none") {
-        contactDiv.style.display = "block";
-      } else {
-        contactDiv.style.display = "none";
-      }
-    }
-  </script>
-</body>
-</html>
+    <div id="resultatSA" class="result" aria-live="polite">
 
 
 
