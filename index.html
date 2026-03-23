@@ -111,5 +111,36 @@
         `Âge de la grossesse : ${semaines} semaines + ${joursRestants} jours.`;
     }
   </script>
-</body>
+function calculer() {
+  const ddr = document.getElementById('ddr').value;
+  if (!ddr) {
+    document.getElementById('resultat').innerText = "Veuillez entrer une date.";
+    return;
+  }
+  const ddrDate = new Date(ddr);
+  const today = new Date();
+  
+  // Calcul de l'âge actuel
+  const diff = today - ddrDate;
+  const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const semaines = Math.floor(jours / 7);
+  const joursRestants = jours % 7;
+
+  // Récupérer le nombre de SA à calculer
+  const sa = parseInt(document.getElementById('sa').value);
+  let dateSA = "";
+  if (!isNaN(sa) && sa > 0) {
+    dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
+  }
+
+  // Affichage
+  let resultat = "Âge de la grossesse : " + semaines + " semaines + " + joursRestants + " jours.";
+  if (dateSA !== "") {
+    resultat += "\nDate estimée pour " + sa + " SA : " + dateSA.toLocaleDateString();
+  }
+
+  document.getElementById('resultat').innerText = resultat;
+}
 </html>
+<label for="sa">Nombre de semaines souhaitées :</label>
+<input type="number" id="sa" placeholder="Ex: 20">
