@@ -6,7 +6,7 @@
   <title>Calculateur d'âge de grossesse</title>
   <meta name="description" content="Calculez l'âge de la grossesse à partir de la date des dernières règles - Dr Jaafar, Regueb.">
 
-  <!-- Open Graph pour Facebook -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Calculateur d'âge de grossesse - Dr Jaafar">
   <meta property="og:description" content="Un outil simple pour calculer l'âge de la grossesse à partir de la date des dernières règles.">
   <meta property="og:image" content="https://docteur-jaa.github.io/images/symbolgynecooeuf.png">
@@ -68,11 +68,11 @@
     button:hover { background: #0056b3; transform: translateY(-2px); }
 
     .result {
-      margin-top: 20px;
-      font-size: 18px;
+      margin-top: 15px;
+      font-size: 16px;
       font-weight: bold;
-      color: #ff1493;
-      background-color: #ccffcc;
+      color: #333;
+      background-color: #ffffff;
       padding: 12px;
       border-radius: 12px;
       box-shadow: inset 0px 2px 5px rgba(0,0,0,0.1);
@@ -81,6 +81,7 @@
 </head>
 <body>
   <div class="card">
+    <!-- Vérifie que l'image est bien dans ton dépôt -->
     <img src="images/symbolgynecooeuf.png" alt="Logo Dr Jaafar" style="max-width:120px;margin-bottom:12px;">
     <h2>Calcul d'âge de grossesse</h2>
     <div class="subtitle">Dr Jaafar Gynécologue – Regueb</div>
@@ -93,14 +94,17 @@
 
     <button onclick="calculer()">Calculer</button>
 
-    <div id="resultat" class="result" aria-live="polite"></div>
+    <!-- Deux cases séparées pour les résultats -->
+    <div id="resultatAge" class="result" aria-live="polite"></div>
+    <div id="resultatSA" class="result" aria-live="polite"></div>
   </div>
 
   <script>
     function calculer() {
       const ddr = document.getElementById('ddr').value;
       if (!ddr) {
-        document.getElementById('resultat').innerText = "Veuillez entrer une date.";
+        document.getElementById('resultatAge').innerText = "Veuillez entrer une date.";
+        document.getElementById('resultatSA').innerText = "";
         return;
       }
       const ddrDate = new Date(ddr);
@@ -112,18 +116,21 @@
       const semaines = Math.floor(jours / 7);
       const joursRestants = jours % 7;
 
+      document.getElementById('resultatAge').innerText =
+        "Âge de la grossesse : " + semaines + " semaines + " + joursRestants + " jours.";
+
       // Récupérer le nombre de SA souhaité
       const sa = parseInt(document.getElementById('sa').value);
-      let resultat = "Âge de la grossesse : " + semaines + " semaines + " + joursRestants + " jours.";
-
       if (!isNaN(sa) && sa > 0) {
         const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
-        resultat += "<br>Date estimée pour " + sa + " SA : " + dateSA.toLocaleDateString();
+        document.getElementById('resultatSA').innerText =
+          "Date estimée pour " + sa + " SA : " + dateSA.toLocaleDateString();
+      } else {
+        document.getElementById('resultatSA').innerText = "";
       }
-
-      document.getElementById('resultat').innerHTML = resultat;
     }
   </script>
 </body>
 </html>
+
 
