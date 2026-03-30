@@ -183,8 +183,8 @@ function calculer() {
     const ddrCalculee = new Date(today.getTime() - totalJours*24*60*60*1000);
 
     document.getElementById('resultatDDR').innerText =
-      "DDR estimée : " +
-      ddrCalculee.toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'});
+      "DDR cal : " +
+      ddrCalculee.toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
   } else {
     document.getElementById('resultatDDR').innerText = "";
   }
