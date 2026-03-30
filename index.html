@@ -26,10 +26,7 @@
       max-width: 420px;
       width: 90%;
       text-align: center;
-      transition: transform 0.3s ease;
     }
-
-    .card:hover { transform: scale(1.03); }
 
     h2 { color: #004aad; margin-bottom: 5px; font-size: 24px; }
 
@@ -56,10 +53,7 @@
       border-radius: 10px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
     }
-
-    button:hover { background: #0056b3; transform: translateY(-2px); }
 
     .result {
       margin-top: 15px;
@@ -67,132 +61,139 @@
       font-weight: bold;
       padding: 12px;
       border-radius: 12px;
-      box-shadow: inset 0px 2px 5px rgba(0,0,0,0.1);
     }
 
-    #resultatAge {
-      background-color: #fff8f0;
-      color: #8B4513; /* brun */
-    }
+    #resultatAge { background-color: #fff8f0; color: #8B4513; }
+    #resultatSA { background-color: #f5f0ff; color: #800080; }
+    #resultatDDR { background-color: #e6f7ff; color: #004aad; }
 
-    #resultatSA {
-      background-color: #f5f0ff;
-      color: #800080; /* violet */
-    }
-
-    /* Coordonnées cachées */
     #contact {
       display: none;
       position: absolute;
-      top: 45px;   /* juste sous le bouton, au-dessus du logo */
+      top: 45px;
       right: 15px;
       text-align: right;
       font-size: 13px;
       background: #fff;
       padding: 8px;
       border-radius: 8px;
-      box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
-    }
-    #contact .adresse {
-      color: #A0522D; /* marron clair */
-      font-weight: bold;
-    }
-    #contact .tel {
-      color: #800080; /* violet */
-      font-weight: bold;
     }
 
-    /* Bouton coordonnées */
     .btn-contact {
       position: absolute;
-      max-width: 170px;
       top: 0px;
       right: 5px;
       font-size: 14px;
       padding: 5px 10px;
-      background: #f9f9f9;   /* fond clair */
-      color: #333;           /* texte foncé */
+      background: #f9f9f9;
+      color: #333;
       border: 1px solid #ccc;
       border-radius: 6px;
       cursor: pointer;
     }
-    .btn-contact:hover {
-      background: #e0e0e0;
-    }
   </style>
 </head>
+
 <body>
   <div class="card">
-    <!-- Bouton pour afficher/masquer les coordonnées -->
+
     <button class="btn-contact" onclick="toggleContact()">Voir mes coordonnées</button>
 
-    <!-- Coordonnées cachées -->
     <div id="contact">
-      <div class="adresse">Dr Ben Ali Jaafar</div>
-      <div class="tel">98670415</div>
+      <div>Dr Ben Ali Jaafar</div>
+      <div>98670415</div>
     </div>
 
-    <!-- Logo -->
-    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" alt="Logo Dr Jaafar" style="max-width:120px;margin-top:10px;margin-bottom:8px;">   
+    <!-- LOGO (inchangé comme demandé) -->
+    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:120px;margin-top:10px;margin-bottom:8px;">   
+
     <h2>Calcul de l'âge de grossesse</h2>
     <div class="subtitle">Dr Ben Ali Jaafar – Gynécologue, Regueb</div>
 
-    <label for="ddr">Date des dernières règles :</label>
+    <label>Date des dernières règles :</label>
     <input type="date" id="ddr">
 
-    <label for="sa">Nombre de semaines souhaitées :</label>
+    <label>Calculer une date à X SA :</label>
     <input type="number" id="sa" placeholder="Ex: 20">
+
+    <label>Retrouver DDR (SA + jours) :</label>
+    <input type="number" id="saActuel" placeholder="SA (ex: 8)">
+    <input type="number" id="joursActuel" placeholder="Jours (ex: 3)">
 
     <button onclick="calculer()">Calculer</button>
 
-    <!-- Deux cases séparées -->
-    <div id="resultatAge" class="result" aria-live="polite"></div>
-    <div id="resultatSA" class="result" aria-live="polite"></div>
+    <div id="resultatAge" class="result"></div>
+    <div id="resultatSA" class="result"></div>
+    <div id="resultatDDR" class="result"></div>
+
   </div>
 
-  <script>
-    function calculer() {
-      const ddr = document.getElementById('ddr').value;
-      if (!ddr) {
-        document.getElementById('resultatAge').innerText = "Veuillez entrer une date.";
-        document.getElementById('resultatSA').innerText = "";
-        return;
-      }
-      const ddrDate = new Date(ddr);
-      const today = new Date();
+<script>
+function calculer() {
 
-      // Calcul de l'âge actuel
-      const diff = today - ddrDate;
-      const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const semaines = Math.floor(jours / 7);
-      const joursRestants = jours % 7;
+  const ddr = document.getElementById('ddr').value;
+  const today = new Date();
 
-      document.getElementById('resultatAge').innerText =
-        "Âge de la grossesse : " + semaines + " semaines + " + joursRestants + " jours.";
+  // =========================
+  // 1) Calcul âge grossesse
+  // =========================
+  if (ddr) {
+    const ddrDate = new Date(ddr);
+    const diff = today - ddrDate;
+    const jours = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const semaines = Math.floor(jours / 7);
+    const joursRestants = jours % 7;
 
-      // Récupérer le nombre de SA souhaité
-      const sa = parseInt(document.getElementById('sa').value);
-      if (!isNaN(sa) && sa > 0) {
-        const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
-        document.getElementById('resultatSA').innerText =
-          "Date estimée pour " + sa + " SA : " + dateSA.toLocaleDateString();
-      } else {
-        document.getElementById('resultatSA').innerText = "";
-      }
+    document.getElementById('resultatAge').innerText =
+      "Âge de la grossesse : " + semaines + " SA + " + joursRestants + " J";
+
+    // =========================
+    // 2) Date à X SA
+    // =========================
+    const sa = parseInt(document.getElementById('sa').value);
+
+    if (!isNaN(sa) && sa > 0) {
+      const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
+
+      document.getElementById('resultatSA').innerText =
+        "Date pour " + sa + " SA : " +
+        dateSA.toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'});
+    } else {
+      document.getElementById('resultatSA').innerText = "";
     }
 
-    function toggleContact() {
-      const contactDiv = document.getElementById('contact');
-      if (contactDiv.style.display === "none" || contactDiv.style.display === "") {
-        contactDiv.style.display = "block";
-      } else {
-        contactDiv.style.display = "none";
-      }
-    }
-  </script>
+  } else {
+    document.getElementById('resultatAge').innerText = "Veuillez entrer une DDR.";
+    document.getElementById('resultatSA').innerText = "";
+  }
+
+  // =========================
+  // 3) DDR à partir SA + jours
+  // =========================
+  const saActuel = parseInt(document.getElementById('saActuel').value);
+  const joursActuel = parseInt(document.getElementById('joursActuel').value);
+
+  if (!isNaN(saActuel) && saActuel >= 0) {
+
+    const totalJours = saActuel*7 + (isNaN(joursActuel) ? 0 : joursActuel);
+    const ddrCalculee = new Date(today.getTime() - totalJours*24*60*60*1000);
+
+    document.getElementById('resultatDDR').innerText =
+      "DDR estimée : " +
+      ddrCalculee.toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'});
+  } else {
+    document.getElementById('resultatDDR').innerText = "";
+  }
+}
+
+function toggleContact() {
+  const c = document.getElementById('contact');
+  c.style.display = (c.style.display === "block") ? "none" : "block";
+}
+</script>
+
 </body>
 </html>
-
 
 
 
