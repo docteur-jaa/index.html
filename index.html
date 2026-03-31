@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculateur de l'âge de grossesse</title>
-  <meta name="description" content="Calculez l'âge de la grossesse à partir de la date des dernières règles - Dr Ben Ali Jaafar, Regueb.">
-
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
     }
 
@@ -29,10 +27,8 @@
     }
 
     h2 { color: #004aad; margin-bottom: 5px; font-size: 24px; }
-
     .subtitle { color: #222; font-size: 14px; margin-bottom: 20px; font-style: italic; }
-
-    label { color: #800080; font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
+    label { color: #800080; font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; text-align: left; }
 
     input[type="date"], input[type="number"] {
       padding: 12px;
@@ -43,160 +39,138 @@
       box-sizing: border-box;
     }
 
+    /* ESPACEMENT ENTRE SAISIE ET RÉSULTATS */
+    .results-container {
+      margin-top: 30px; 
+    }
+
     .result {
-      margin-top: 15px;
+      margin-top: 12px;
       font-size: 16px;
       font-weight: bold;
       padding: 12px;
       border-radius: 12px;
+      display: none; /* CACHÉ PAR DÉFAUT */
     }
 
-    #resultatAge { background-color: #fff8f0; color: #8B4513; }
-    #resultatSA { background-color: #f5f0ff; color: #800080; }
-    #resultatDDR { background-color: #e6f7ff; color: #004aad; }
+    #resultatAge { background-color: #fff8f0; color: #8B4513; border: 1px solid #ffb347; }
+    #resultatSA { background-color: #f5f0ff; color: #800080; border: 1px solid #dcd0ff; }
+    #resultatDDR { background-color: #e6f7ff; color: #004aad; border: 1px solid #b3e5fc; }
 
-  #contact {
-  display: none;
-  position: absolute;
-  top: 45px;
-  right: 15px;
-  text-align: right;
-  font-size: 13px;
-  background: #fff;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+    /* STYLE CONTACT ET SURVOL */
+    #contact {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 15px;
+      text-align: right;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+      z-index: 100;
+    }
 
-  color: #800020;   /* bordeaux */
-  font-weight: bold;
-}
+    .phone-link {
+      color: #008000;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .phone-link:hover {
+      color: #004d00; /* Vert plus foncé au survol */
+      text-decoration: underline;
+    }
 
     .btn-contact {
       position: absolute;
-      top: 0px;
-      right: 5px;
-      font-size: 14px;
-      padding: 5px 10px;
-      background: #f9f9f9;
-      color: #333;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      padding: 6px 12px;
+      background: #ffffffaa;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 20px;
       cursor: pointer;
     }
   </style>
 </head>
-
 <body>
+
   <div class="card">
+    <button class="btn-contact" onclick="toggleContact()">Infos Contact</button>
 
-    <button class="btn-contact" onclick="toggleContact()">Voir mes coordonnées</button>
+    <div id="contact">
+      <div style="color:#800020; font-weight:bold;">Dr Ben Ali Jaafar</div>
+      <div style="font-weight:bold; margin-top:5px;">
+        <a href="tel:+21698670415" class="phone-link">98 670 415</a>
+      </div>
+    </div>
 
-   <div id="contact" style="font-family: Arial, sans-serif; line-height: 1.6;">
-  <div style="color:#800020; font-weight:bold; font-size: 1.2em;">Dr Ben Ali Jaafar</div>
-  
-  <div style="font-weight:bold;">
-    <a href="tel:+21698670415" style="color:#008000; text-decoration:none;">98 670 415</a>
-  </div>
-</div>
+    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:90px; margin-bottom:10px;">   
 
-    <!-- LOGO inchangé -->
-    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:120px;margin-top:10px;margin-bottom:8px;">   
-
-    <h2>Calcul de l'âge de grossesse</h2>
+    <h2>Calculateur de Grossesse</h2>
     <div class="subtitle">Dr Ben Ali Jaafar – Gynécologue, Regueb</div>
 
-    <label>Date des dernières règles :</label>
+    <label>Date des dernières règles (DDR) :</label>
     <input type="date" id="ddr" oninput="calculer()">
 
-    <label>Calculer une date à X SA :</label>
-    <input type="number" id="sa" placeholder="Ex: 20" min="1" max="45" oninput="calculer()">
+    <label>Calculer la date pour (en SA) :</label>
+    <input type="number" id="sa" placeholder="Ex: 12, 22, 32" oninput="calculer()">
 
-    <label>Retrouver DDR (SA + jours) :</label>
-    <div style="display:flex; align-items:center; gap:5px;">
-      <input type="number" id="saActuel" placeholder="SA" style="width:40%;" min="0" max="45" oninput="calculer()">
-      <span>SA +</span>
-      <input type="number" id="joursActuel" placeholder="J" style="width:40%;" min="0" max="6" oninput="calculer()">
-      <span>J</span>
+    <label>Retrouver DDR (si SA actuel connu) :</label>
+    <div style="display:flex; gap:8px;">
+      <input type="number" id="saActuel" placeholder="Semaines" style="width:50%;" oninput="calculer()">
+      <input type="number" id="joursActuel" placeholder="Jours" style="width:50%;" oninput="calculer()">
     </div>
 
-    <!-- Résultats -->
-    <div id="resultatAge" class="result">
-      Âge de la grossesse : <span id="valAge"></span>
+    <div class="results-container">
+      <div id="resultatAge" class="result">Âge actuel : <span id="valAge"></span></div>
+      <div id="resultatSA" class="result">Date à <span id="valSA"></span></div>
+      <div id="resultatDDR" class="result">DDR estimée : <span id="valDDR"></span></div>
     </div>
-
-    <div id="resultatSA" class="result">
-      Date pour <span id="valSA"></span>
-    </div>
-
-    <div id="resultatDDR" class="result">
-      DDR calculée : <span id="valDDR"></span>
-    </div>
-
   </div>
 
 <script>
 function calculer() {
-
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  document.getElementById('valAge').innerText = "";
-  document.getElementById('valSA').innerText = "";
-  document.getElementById('valDDR').innerText = "";
+  const ddrInput = document.getElementById('ddr').value;
+  const saInput = document.getElementById('sa').value;
+  const saAct = document.getElementById('saActuel').value;
+  const jrAct = document.getElementById('joursActuel').value;
 
-  const ddr = document.getElementById('ddr').value;
-
-  // 1) Age grossesse
-  if (ddr) {
-    const ddrDate = new Date(ddr);
-    const diff = today - ddrDate;
-
-    const jours = Math.floor(diff / (1000*60*60*24));
-    const semaines = Math.floor(jours / 7);
-    const jr = jours % 7;
-
-    document.getElementById('valAge').innerText =
-      semaines + " SA + " + jr + " J";
-
-    // 2) Date pour SA
-    const sa = parseInt(document.getElementById('sa').value);
-
-    if (!isNaN(sa) && sa > 0 && sa <= 45) {
-      const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
-
-      document.getElementById('valSA').innerText =
-        sa + " SA : " +
-        dateSA.toLocaleDateString('fr-FR', {
-          day:'2-digit',
-          month:'2-digit',
-          year:'numeric'
-        });
+  // Gestion de la DDR saisie
+  if (ddrInput) {
+    const ddrDate = new Date(ddrInput);
+    const diffDays = Math.floor((today - ddrDate) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays >= 0) {
+      document.getElementById('valAge').innerText = Math.floor(diffDays / 7) + " SA + " + (diffDays % 7) + " J";
+      document.getElementById('resultatAge').style.display = "block";
     }
 
+    if (saInput && saInput > 0) {
+      const target = new Date(ddrDate.getTime() + (saInput * 7 * 24 * 60 * 60 * 1000));
+      document.getElementById('valSA').innerText = saInput + " SA : " + target.toLocaleDateString('fr-FR');
+      document.getElementById('resultatSA').style.display = "block";
+    } else {
+      document.getElementById('resultatSA').style.display = "none";
+    }
   } else {
-    document.getElementById('valAge').innerText = "Veuillez entrer une DDR";
+    document.getElementById('resultatAge').style.display = "none";
+    document.getElementById('resultatSA').style.display = "none";
   }
 
-  // 3) DDR calculée
-  const saActuel = parseInt(document.getElementById('saActuel').value);
-  const joursActuel = parseInt(document.getElementById('joursActuel').value);
-
-  if (!isNaN(saActuel) && saActuel >= 0) {
-
-    if (!isNaN(joursActuel) && joursActuel > 6) {
-      document.getElementById('valDDR').innerText = "max 6 jours";
-      return;
-    }
-
-    const totalJours = saActuel*7 + (isNaN(joursActuel) ? 0 : joursActuel);
-
-    const ddrCalc = new Date(today.getTime() - totalJours*24*60*60*1000);
-
-    document.getElementById('valDDR').innerText =
-      ddrCalc.toLocaleDateString('fr-FR', {
-        day:'2-digit',
-        month:'2-digit',
-        year:'numeric'
-      });
+  // Gestion du calcul inverse (Retrouver DDR)
+  if (saAct !== "" && saAct >= 0) {
+    const totalJ = (parseInt(saAct) * 7) + (parseInt(jrAct) || 0);
+    const ddrEst = new Date(today.getTime() - (totalJ * 24 * 60 * 60 * 1000));
+    document.getElementById('valDDR').innerText = ddrEst.toLocaleDateString('fr-FR');
+    document.getElementById('resultatDDR').style.display = "block";
+  } else {
+    document.getElementById('resultatDDR').style.display = "none";
   }
 }
 
@@ -208,3 +182,4 @@ function toggleContact() {
 
 </body>
 </html>
+    
