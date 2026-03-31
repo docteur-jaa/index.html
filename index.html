@@ -123,7 +123,6 @@
   <input type="number" id="joursActuel" placeholder="J" style="width:40%;">
   <span>J</span>
 </div>
-
     <button onclick="calculer()">Calculer</button>
 
     <div id="resultatAge" class="result"></div>
@@ -161,7 +160,7 @@ function calculer() {
 
       document.getElementById('resultatSA').innerText =
         "Date pour " + sa + " SA : " +
-        dateSA.toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'});
+        dateSA.toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
     } else {
       document.getElementById('resultatSA').innerText = "";
     }
@@ -183,7 +182,7 @@ function calculer() {
     const ddrCalculee = new Date(today.getTime() - totalJours*24*60*60*1000);
 
     document.getElementById('resultatDDR').innerText =
-      "DDR cal : " +
+      "DDR estimée : " +
       ddrCalculee.toLocaleDateString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric'});
   } else {
     document.getElementById('resultatDDR').innerText = "";
@@ -197,4 +196,5 @@ function toggleContact() {
 </script>
 
 </body>
+</html>
 </html>
