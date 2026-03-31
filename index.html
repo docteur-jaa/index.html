@@ -39,16 +39,13 @@
       box-sizing: border-box;
     }
 
-    /* --- AJUSTEMENT DES RÉSULTATS --- */
     .result {
       margin-top: 15px;
       font-size: 16px;
       font-weight: bold;
       padding: 12px;
       border-radius: 12px;
-      display: none; /* Caché par défaut */
-      
-      /* Commande pour l'espace entre titre et calcul */
+      display: none; 
       justify-content: space-between; 
       align-items: center;
     }
@@ -69,6 +66,20 @@
       border-radius: 8px;
       box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
       z-index: 10;
+    }
+
+    /* --- EFFET DE SURBRILLANCE ICI --- */
+    .num-tel {
+      color: #008000;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .num-tel:hover {
+      color: #004d00; /* Devient vert foncé */
+      background-color: #e6ffe6; /* Fond très légèrement vert */
+      padding: 2px 5px;
+      border-radius: 4px;
     }
 
     .btn-contact {
@@ -94,7 +105,7 @@
     <div id="contact" style="font-family: Arial, sans-serif; line-height: 1.6;">
       <div style="color:#800020; font-weight:bold; font-size: 1.2em;">Dr Ben Ali Jaafar</div>
       <div style="font-weight:bold;">
-        <a href="tel:+21698670415" style="color:#008000; text-decoration:none;">98 670 415</a>
+        <a href="tel:+21698670415" class="num-tel">98 670 415</a>
       </div>
     </div>
 
@@ -144,7 +155,6 @@ function calculer() {
   const saActuel = document.getElementById('saActuel').value;
   const joursActuel = document.getElementById('joursActuel').value;
 
-  // 1 & 2) Age et SA
   if (ddr) {
     const ddrDate = new Date(ddr);
     const diff = today - ddrDate;
@@ -168,7 +178,6 @@ function calculer() {
     document.getElementById('resultatSA').style.display = "none";
   }
 
-  // 3) Retrouver DDR
   if (saActuel !== "" && saActuel >= 0) {
     const totalJours = parseInt(saActuel)*7 + (parseInt(joursActuel) || 0);
     const ddrCalc = new Date(today.getTime() - totalJours*24*60*60*1000);
@@ -186,6 +195,4 @@ function toggleContact() {
 </script>
 </body>
 </html>
-
-
-
+ 
