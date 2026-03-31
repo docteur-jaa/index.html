@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calculateur de l'âge de grossesse</title>
+  <meta name="description" content="Calculez l'âge de la grossesse à partir de la date des dernières règles - Dr Ben Ali Jaafar, Regueb.">
 
   <style>
     body {
@@ -27,98 +28,118 @@
       text-align: center;
     }
 
-    h2 { color: #004aad; }
+    h2 { color: #004aad; margin-bottom: 5px; font-size: 24px; }
 
-    label {
-      color: #800080;
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-    }
+    .subtitle { color: #222; font-size: 14px; margin-bottom: 20px; font-style: italic; }
 
-    input {
-      padding: 10px;
+    label { color: #800080; font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
+
+    input[type="date"], input[type="number"] {
+      padding: 12px;
       width: 100%;
       border-radius: 10px;
       border: 1px solid #ccc;
-      margin-top: 5px;
-    }
-
-    button {
-      margin-top: 15px;
-      padding: 12px;
-      width: 100%;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      font-size: 14px;
+      box-sizing: border-box;
     }
 
     .result {
       margin-top: 15px;
-      padding: 10px;
-      border-radius: 10px;
+      font-size: 16px;
       font-weight: bold;
+      padding: 12px;
+      border-radius: 12px;
     }
 
-    #resultatAge { background: #fff8f0; }
-    #resultatSA { background: #f5f0ff; }
-    #resultatDDR { background: #e6f7ff; }
+    #resultatAge { background-color: #fff8f0; color: #8B4513; }
+    #resultatSA { background-color: #f5f0ff; color: #800080; }
+    #resultatDDR { background-color: #e6f7ff; color: #004aad; }
+
+    #contact {
+      display: none;
+      position: absolute;
+      top: 45px;
+      right: 15px;
+      text-align: right;
+      font-size: 13px;
+      background: #fff;
+      padding: 8px;
+      border-radius: 8px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .btn-contact {
+      position: absolute;
+      top: 0px;
+      right: 5px;
+      font-size: 14px;
+      padding: 5px 10px;
+      background: #f9f9f9;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
-<div class="card">
+  <div class="card">
 
-  <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:120px;">
+    <button class="btn-contact" onclick="toggleContact()">Voir mes coordonnées</button>
 
-  <h2>Calcul grossesse</h2>
+    <div id="contact">
+      <div>Dr Ben Ali Jaafar</div>
+      <div>98670415</div>
+    </div>
 
-  <label>DDR :</label>
-  <input type="date" id="ddr">
+    <!-- LOGO inchangé -->
+    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:120px;margin-top:10px;margin-bottom:8px;">   
 
-  <label>Calculer date à SA :</label>
-  <input type="number" id="sa" min="1" max="45">
+    <h2>Calcul de l'âge de grossesse</h2>
+    <div class="subtitle">Dr Ben Ali Jaafar – Gynécologue, Regueb</div>
 
-  <label>DDR à partir SA + jours :</label>
-  <div style="display:flex; gap:5px;">
-    <input type="number" id="saActuel" placeholder="SA" min="0" max="45">
-    <input type="number" id="joursActuel" placeholder="J" min="0" max="6">
+    <label>Date des dernières règles :</label>
+    <input type="date" id="ddr" oninput="calculer()">
+
+    <label>Calculer une date à X SA :</label>
+    <input type="number" id="sa" placeholder="Ex: 20" min="1" max="45" oninput="calculer()">
+
+    <label>Retrouver DDR (SA + jours) :</label>
+    <div style="display:flex; align-items:center; gap:5px;">
+      <input type="number" id="saActuel" placeholder="SA" style="width:40%;" min="0" max="45" oninput="calculer()">
+      <span>SA +</span>
+      <input type="number" id="joursActuel" placeholder="J" style="width:40%;" min="0" max="6" oninput="calculer()">
+      <span>J</span>
+    </div>
+
+    <!-- Résultats -->
+    <div id="resultatAge" class="result">
+      Âge de la grossesse : <span id="valAge"></span>
+    </div>
+
+    <div id="resultatSA" class="result">
+      Date pour <span id="valSA"></span>
+    </div>
+
+    <div id="resultatDDR" class="result">
+      DDR calculée : <span id="valDDR"></span>
+    </div>
+
   </div>
-
-  <button onclick="calculer()">Calculer</button>
-
-  <!-- Résultats -->
-  <div id="resultatAge" class="result">
-    Âge grossesse : <span id="valAge"></span>
-  </div>
-
-  <div id="resultatSA" class="result">
-    Date pour <span id="valSA"></span>
-  </div>
-
-  <div id="resultatDDR" class="result">
-    DDR calculée : <span id="valDDR"></span>
-  </div>
-
-</div>
 
 <script>
 function calculer() {
 
   const today = new Date();
 
-  // Reset valeurs
   document.getElementById('valAge').innerText = "";
   document.getElementById('valSA').innerText = "";
   document.getElementById('valDDR').innerText = "";
 
   const ddr = document.getElementById('ddr').value;
 
-  // ====================
   // 1) Age grossesse
-  // ====================
   if (ddr) {
     const ddrDate = new Date(ddr);
     const diff = today - ddrDate;
@@ -130,13 +151,10 @@ function calculer() {
     document.getElementById('valAge').innerText =
       semaines + " SA + " + jr + " J";
 
-    // ====================
     // 2) Date pour SA
-    // ====================
     const sa = parseInt(document.getElementById('sa').value);
 
     if (!isNaN(sa) && sa > 0 && sa <= 45) {
-
       const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
 
       document.getElementById('valSA').innerText =
@@ -149,12 +167,10 @@ function calculer() {
     }
 
   } else {
-    document.getElementById('valAge').innerText = "Entrer DDR";
+    document.getElementById('valAge').innerText = "Veuillez entrer une DDR";
   }
 
-  // ====================
   // 3) DDR calculée
-  // ====================
   const saActuel = parseInt(document.getElementById('saActuel').value);
   const joursActuel = parseInt(document.getElementById('joursActuel').value);
 
@@ -177,11 +193,12 @@ function calculer() {
       });
   }
 }
+
+function toggleContact() {
+  const c = document.getElementById('contact');
+  c.style.display = (c.style.display === "block") ? "none" : "block";
+}
 </script>
 
 </body>
-</html>
-
-</body>
-</html>
 </html>
