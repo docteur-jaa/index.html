@@ -24,6 +24,8 @@
       max-width: 420px;
       width: 90%;
       text-align: center;
+      /* On fixe la hauteur minimale pour que la carte ne change jamais de taille */
+      min-height: 580px; 
     }
 
     h2 { color: #004aad; margin-bottom: 5px; font-size: 24px; }
@@ -37,28 +39,46 @@
       border: 1px solid #ccc;
       font-size: 14px;
       box-sizing: border-box;
+      outline: none;
+    }
+
+    input:focus { border: 2px solid #004aad; }
+
+    /* --- ZONE DE RÉSULTATS FIXE --- */
+    .results-container {
+      margin-top: 20px;
+      height: 220px; /* Hauteur réservée pour les 3 cases */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .result {
-      margin-top: 15px;
       font-size: 16px;
       font-weight: bold;
       padding: 12px;
       border-radius: 12px;
-      display: none; 
+      display: flex; 
       justify-content: space-between; 
       align-items: center;
+      min-height: 20px;
+      
+      /* Animation de fondu */
+      opacity: 0; 
+      transition: opacity 0.8s ease-in-out;
+      pointer-events: none; /* Empêche de cliquer sur une case invisible */
     }
 
-    #resultatAge { background-color: #fff8f0; color: #8B4513; }
+    /* Couleurs */
+    #resultatAge { background-color: #fff8f0; color: #8B4513; opacity: 1; pointer-events: auto; }
     #resultatSA { background-color: #f5f0ff; color: #800080; }
     #resultatDDR { background-color: #e6f7ff; color: #004aad; }
 
+    /* Contact */
     #contact {
       display: none;
       position: absolute;
-      top: 45px;
-      right: 15px;
+      top: 45px; right: 15px;
       text-align: right;
       font-size: 13px;
       background: #fff;
@@ -68,30 +88,13 @@
       z-index: 10;
     }
 
-    /* --- EFFET DE SURBRILLANCE ICI --- */
-    .num-tel {
-      color: #008000;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .num-tel:hover {
-      color: #004d00; /* Devient vert foncé */
-      background-color: #e6ffe6; /* Fond très légèrement vert */
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
-
+    .num-tel { color: #008000; text-decoration: none; }
     .btn-contact {
       position: absolute;
-      top: 0px;
-      right: 5px;
-      font-size: 14px;
-      padding: 5px 10px;
-      background: #f9f9f9;
-      color: #333;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      top: 0px; right: 5px;
+      font-size: 14px; padding: 5px 10px;
+      background: #f9f9f9; color: #333;
+      border: 1px solid #ccc; border-radius: 6px;
       cursor: pointer;
     }
   </style>
@@ -99,92 +102,129 @@
 
 <body>
   <div class="card">
-
     <button class="btn-contact" onclick="toggleContact()">Voir mes coordonnées</button>
 
-    <div id="contact" style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <div id="contact">
       <div style="color:#800020; font-weight:bold; font-size: 1.2em;">Dr Ben Ali Jaafar</div>
       <div style="font-weight:bold;">
         <a href="tel:+21698670415" class="num-tel">98 670 415</a>
       </div>
     </div>
 
-    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:120px;margin-top:10px;margin-bottom:8px;">    
+    <img src="https://raw.githubusercontent.com/docteur-jaa/index.html/main/images/symbolgynecooeuf.png" style="max-width:110px;margin-top:10px;margin-bottom:8px;">    
 
     <h2>Calcul de l'âge de grossesse</h2>
     <div class="subtitle">Dr Ben Ali Jaafar – Gynécologue, Regueb</div>
 
     <label>Date des dernières règles :</label>
-    <input type="date" id="ddr" oninput="calculer()">
+    <input type="date" id="ddr" oninput="calculerAge(); calculerSA();" autofocus>
 
     <label>Calculer une date à X SA :</label>
-    <input type="number" id="sa" placeholder="Ex: 20" oninput="calculer()">
+    <input type="number" id="sa" placeholder="Ex: 20" oninput="calculerSA()">
 
     <label>Retrouver DDR (SA + jours) :</label>
     <div style="display:flex; align-items:center; gap:5px;">
-      <input type="number" id="saActuel" placeholder="SA" style="width:40%;" oninput="calculer()">
+      <input type="number" id="saActuel" placeholder="SA" style="width:40%;" oninput="calculerDDR()">
       <span>SA +</span>
-      <input type="number" id="joursActuel" placeholder="J" style="width:40%;" oninput="calculer()">
+      <input type="number" id="joursActuel" placeholder="J" style="width:40%;" oninput="calculerDDR()">
       <span>J</span>
     </div>
 
-    <div id="resultatAge" class="result">
-      <span>Âge de la grossesse :</span>
-      <span id="valAge"></span>
-    </div>
+    <div class="results-container">
+        <div id="resultatAge" class="result">
+          <span>Âge de la grossesse :</span>
+          <span id="valAge"></span>
+        </div>
 
-    <div id="resultatSA" class="result">
-      <span id="labelSA">Date pour :</span>
-      <span id="valSA"></span>
-    </div>
+        <div id="resultatSA" class="result">
+          <span id="labelSA">Date pour :</span>
+          <span id="valSA"></span>
+        </div>
 
-    <div id="resultatDDR" class="result">
-      <span>DDR calculée :</span>
-      <span id="valDDR"></span>
+        <div id="resultatDDR" class="result">
+          <span>DDR calculée :</span>
+          <span id="valDDR"></span>
+        </div>
     </div>
-
   </div>
 
 <script>
-function calculer() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
+let timerAge, timerSA, timerDDR;
+const DELAI = 15000;
 
-  const ddr = document.getElementById('ddr').value;
-  const sa = document.getElementById('sa').value;
-  const saActuel = document.getElementById('saActuel').value;
-  const joursActuel = document.getElementById('joursActuel').value;
-
-  if (ddr) {
-    const ddrDate = new Date(ddr);
+function calculerAge() {
+  const ddrInput = document.getElementById('ddr');
+  if (ddrInput.value) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const ddrDate = new Date(ddrInput.value);
     const diff = today - ddrDate;
     const jours = Math.floor(diff / (1000*60*60*24));
     
     if (jours >= 0) {
-      document.getElementById('valAge').innerText = Math.floor(jours/7) + " SA + " + (jours%7) + " J";
-      document.getElementById('resultatAge').style.display = "flex";
+      const val = document.getElementById('valAge');
+      val.innerText = Math.floor(jours/7) + " SA + " + (jours%7) + " J";
+      
+      clearTimeout(timerAge);
+      timerAge = setTimeout(() => {
+        val.innerText = ""; 
+        ddrInput.value = ""; 
+        ddrInput.focus();
+      }, DELAI);
     }
-
-    if (sa > 0) {
-      const dateSA = new Date(ddrDate.getTime() + sa*7*24*60*60*1000);
-      document.getElementById('labelSA').innerText = "Date pour " + sa + " SA :";
-      document.getElementById('valSA').innerText = dateSA.toLocaleDateString('fr-FR');
-      document.getElementById('resultatSA').style.display = "flex";
-    } else {
-      document.getElementById('resultatSA').style.display = "none";
-    }
-  } else {
-    document.getElementById('resultatAge').style.display = "none";
-    document.getElementById('resultatSA').style.display = "none";
   }
+}
 
-  if (saActuel !== "" && saActuel >= 0) {
-    const totalJours = parseInt(saActuel)*7 + (parseInt(joursActuel) || 0);
+function calculerSA() {
+  const ddrInput = document.getElementById('ddr');
+  const saInput = document.getElementById('sa');
+  const el = document.getElementById('resultatSA');
+  const val = document.getElementById('valSA');
+
+  if (ddrInput.value && saInput.value > 0) {
+    const ddrDate = new Date(ddrInput.value);
+    const dateSA = new Date(ddrDate.getTime() + saInput.value*7*24*60*60*1000);
+    
+    el.style.opacity = "1";
+    document.getElementById('labelSA').innerText = "Date pour " + saInput.value + " SA :";
+    val.innerText = dateSA.toLocaleDateString('fr-FR');
+    
+    clearTimeout(timerSA);
+    timerSA = setTimeout(() => {
+      el.style.opacity = "0";
+      setTimeout(() => { 
+        val.innerText = ""; 
+        saInput.value = ""; 
+      }, 800);
+      ddrInput.focus();
+    }, DELAI);
+  }
+}
+
+function calculerDDR() {
+  const ddrInput = document.getElementById('ddr');
+  const saInput = document.getElementById('saActuel');
+  const joursInput = document.getElementById('joursActuel');
+  const el = document.getElementById('resultatDDR');
+  const val = document.getElementById('valDDR');
+
+  if (saInput.value !== "" && saInput.value >= 0) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const totalJours = parseInt(saInput.value)*7 + (parseInt(joursInput.value) || 0);
     const ddrCalc = new Date(today.getTime() - totalJours*24*60*60*1000);
-    document.getElementById('valDDR').innerText = ddrCalc.toLocaleDateString('fr-FR');
-    document.getElementById('resultatDDR').style.display = "flex";
-  } else {
-    document.getElementById('resultatDDR').style.display = "none";
+    
+    el.style.opacity = "1";
+    val.innerText = ddrCalc.toLocaleDateString('fr-FR');
+    
+    clearTimeout(timerDDR);
+    timerDDR = setTimeout(() => {
+      el.style.opacity = "0";
+      setTimeout(() => { 
+        val.innerText = ""; 
+        saInput.value = ""; 
+        joursInput.value = "";
+      }, 800);
+      ddrInput.focus();
+    }, DELAI);
   }
 }
 
@@ -195,4 +235,7 @@ function toggleContact() {
 </script>
 </body>
 </html>
- 
+
+
+
+
