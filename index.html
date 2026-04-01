@@ -24,7 +24,6 @@
       max-width: 420px;
       width: 90%;
       text-align: center;
-      /* On fixe la hauteur minimale pour que la carte ne change jamais de taille */
       min-height: 580px; 
     }
 
@@ -44,10 +43,9 @@
 
     input:focus { border: 2px solid #004aad; }
 
-    /* --- ZONE DE RÉSULTATS FIXE --- */
     .results-container {
       margin-top: 20px;
-      height: 220px; /* Hauteur réservée pour les 3 cases */
+      height: 220px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -62,19 +60,15 @@
       justify-content: space-between; 
       align-items: center;
       min-height: 20px;
-      
-      /* Animation de fondu */
       opacity: 0; 
       transition: opacity 0.8s ease-in-out;
-      pointer-events: none; /* Empêche de cliquer sur une case invisible */
+      pointer-events: none;
     }
 
-    /* Couleurs */
     #resultatAge { background-color: #fff8f0; color: #8B4513; opacity: 1; pointer-events: auto; }
     #resultatSA { background-color: #f5f0ff; color: #800080; }
     #resultatDDR { background-color: #e6f7ff; color: #004aad; }
 
-    /* Contact */
     #contact {
       display: none;
       position: absolute;
@@ -117,7 +111,7 @@
     <div class="subtitle">Dr Ben Ali Jaafar – Gynécologue, Regueb</div>
 
     <label>Date des dernières règles :</label>
-    <input type="date" id="ddr" oninput="calculerAge(); calculerSA();" autofocus>
+    <input type="date" id="ddr" onchange="calculerAge(); calculerSA();" autofocus>
 
     <label>Calculer une date à X SA :</label>
     <input type="number" id="sa" placeholder="Ex: 20" oninput="calculerSA()">
@@ -155,6 +149,9 @@ const DELAI = 15000;
 function calculerAge() {
   const ddrInput = document.getElementById('ddr');
   if (ddrInput.value) {
+    // Se déclenche seulement quand la date est fixée
+    ddrInput.blur(); 
+
     const today = new Date(); today.setHours(0,0,0,0);
     const ddrDate = new Date(ddrInput.value);
     const diff = today - ddrDate;
@@ -235,7 +232,6 @@ function toggleContact() {
 </script>
 </body>
 </html>
+ 
 
-
-
-
+    
